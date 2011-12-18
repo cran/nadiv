@@ -1,0 +1,4 @@
+useDynLib(nadiv, dij, makea_ml)
+import(Matrix)
+export(makeA, makeD, makeDsim, makeAA, makeDomEpi, sm2list, aiFun, numPed, genAssign, DFC, FindDFC)
+
