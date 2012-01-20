@@ -19,6 +19,9 @@ A logical indicating whether or not to invert the D matrix}
 
 
 \details{
+Missing parents (e.g., base population) should be denoted by either 'NA' or '0'.
+
+
 Because of the computational demands of constructing the D matrix (see \code{\link{makeD}}), this function allows for the inverses that are derived from the D matrix (i.e., D-inverse, AD-inverse, and DD-inverse)to be constructed at the same time.  This way, the D matrix will only have to be constructed once for use in the three seperate genetic relatedness inverse matrices that depend upon it.  However, using the \code{output} and \code{Dinverse} options in different combinations will ensure that only the desired matrix inverses are constructed.
 
 Both the AD and DD matrix are computed from the Hadamard product of the respective matrices (see also, \code{\link{makeAA}}).}

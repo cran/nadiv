@@ -1,12 +1,12 @@
-\name{FindDFC}
-\alias{FindDFC}
+\name{findDFC}
+\alias{findDFC}
 \title{
 Finds the double first cousins in a pedigree}
 \description{
 Given a pedigree, all pairs of individuals that are double first cousins are returned.}
 
 \usage{
-FindDFC(pedigree)
+findDFC(pedigree)
 }
 
 \arguments{

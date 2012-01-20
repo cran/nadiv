@@ -1,4 +1,4 @@
-FindDFC<-function(pedigree)
+findDFC<-function(pedigree)
 {
   numeric.pedigree <- numPed(pedigree)
   ped <- cbind(numeric.pedigree, genAssign(numeric.pedigree), rep(0, dim(numeric.pedigree)[1]))
@@ -14,7 +14,7 @@ FindDFC<-function(pedigree)
 
   gps <- cbind(numeric.pedigree[ps.noFS[,3], 2:3], numeric.pedigree[ps.noFS[,4], 2:3], numeric.pedigree[ps.noFS[,5], 2:3], numeric.pedigree[ps.noFS[,6], 2:3]) 
 
-  dfcs.vec<-apply(gps, MAR = 1, FUN = DFC)
+  dfcs.vec<-apply(gps, MARGIN = 1, FUN = DFC)
   indexed <- cbind(ps.noFS, dfcs.vec)
   num.dfcs <- indexed[indexed[,7] == 1, 1:6]
   cnt.dfcs <- dim(unique(num.dfcs[, 3:6]))[1]

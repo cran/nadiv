@@ -1,6 +1,6 @@
 makeAA <- function(pedigree)
 {
-  A <- makeA(pedigree)$Asparse
+  A <- makeA(pedigree)
   AA <- A*A
   logDet <- determinant(AA, logarithm = TRUE)$modulus[1]
   AAinv <- as(solve(AA), "dgCMatrix")

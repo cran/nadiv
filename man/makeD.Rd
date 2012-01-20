@@ -15,6 +15,8 @@ A pedigree with columns organized: ID, Dam, Sire}
 A logical indicating whether or not to invert the D matrix}
 }
 \details{
+Missing parents (e.g., base population) should be denoted by either 'NA' or '0'.
+
 There exists no convenient method of obtaining the inverse of the dominance genetic relatedness matrix (or the D matrix itself) directly from a pedigree (such as for the inverse of A, i.e., Quaas (1995)).  Therefore, this function computes the coefficient of fraternity (Lynch and Walsh, 1998) for every individual in the pedigree with a non-zero additive genetic relatedness.  Note, the construction of the D matrix is more computationally demanding (in time and space) than is the construction of A.}
 \value{
   \item{A }{the A matrix in sparse matrix form}
