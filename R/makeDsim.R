@@ -43,8 +43,8 @@ print("starting to make Dsim")
     }
 
   stack.alleles<-rbind(dalleles, salleles)
-  simD.nonself <- apply(stack.alleles, MAR = 2, FUN = IBD2, pairs = approxD.nonself[,1:2], n=n) 
-  approxD.nonself$simD <- apply(simD.nonself, MAR = 1, FUN = mean)
+  simD.nonself <- apply(stack.alleles, MARGIN = 2, FUN = IBD2, pairs = approxD.nonself[,1:2], n=n) 
+  approxD.nonself$simD <- apply(simD.nonself, MARGIN = 1, FUN = mean)
   listDsim <- NULL
   if(calcSE) {
      approxD.nonself$Dse <- vapply(approxD.nonself$simD, FUN = SEfun, FUN.VALUE = vector("numeric", 1), N)

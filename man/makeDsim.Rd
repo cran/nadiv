@@ -20,6 +20,9 @@ A logical indicating whether or not the standard errors for each coefficient of 
 }
 
 \details{
+Missing parents (e.g., base population) should be denoted by either 'NA' or '0'.
+
+
 Ovaskainen et al. (2008) indicated that the method of calculating the D matrix (see \code{\link{makeD}}) is only an approximation.  They proposed a simulation method that is implemented here.  This should be more appropriate when inbreeding occurs in the pedigree. 
 
 The value, \code{listDsim} will list both the approximate values (returned from \code{\link{makeD}}) as well as the simulated values.  If \code{calcSE} is TRUE, these values will be listed in \code{listDsim}.

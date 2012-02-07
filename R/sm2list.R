@@ -1,3 +1,8 @@
+#####################################
+#adapted from code written by
+#Jarrod Hadfield in the 
+#MCMCglmm package
+######################################
 sm2list<-function (A = NULL, rownames = NULL, colnames=c("row", "column", "A"))
 {
     ginv <- data.frame(Row = rep(1:length(A@p[-1]),

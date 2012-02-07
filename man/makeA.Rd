@@ -2,7 +2,7 @@
 \alias{makeA}
 \title{Creates the additive genetic relationship matrix
 }
-\description{This returns the additive relationship matrix in both sparse and dense matrix formats.
+\description{This returns the additive relationship matrix in sparse matrix format.
 }
 \usage{
 makeA(pedigree)
@@ -12,19 +12,15 @@ makeA(pedigree)
 A pedigree where the columns are ordered ID, Dam, Sire}
 }
 \details{
-Uses the algorithm of Meuwissen and Luo (1992).  Also, used as a support function to \code{\link{makeD}}.}
+Missing parents (e.g., base population) should be denoted by either 'NA' or '0'.
 
-\value{Returns A, or the numerator relationship matrix, in sparse and dense matrix form.
+Uses \code{\link{relfactor}} function in package \code{pedigreemm}.  Also, used as a support function to \code{\link{makeD}}.}
 
-  \item{Asparse }{A in sparse matrix form}
-  \item{Adense }{A in dense matrix form}
-}
-
-\references{Meuwissen, T.H.E. & Luo, Z. 1992. Computing inbreeding coefficients in large populations. Genetics, Selection, Evolution 24, 305-313.}
+\value{Returns A, or the numerator relationship matrix, in sparse matrix form.}
 
 \author{\email{matthewwolak@gmail.com}}
 
-\seealso{\code{\link{makeD}}}
+\seealso{\code{\link{relfactor}}, \code{\link{makeD}}}
 
 \examples{
  makeA(Mrode2)

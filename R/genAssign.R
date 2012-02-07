@@ -1,3 +1,7 @@
+##############################
+#Adapted from 'kindepth' function
+#in 'kinship' package   
+#############################
 genAssign <- function(pedigree)
 { 
    n <- dim(pedigree)[1]
