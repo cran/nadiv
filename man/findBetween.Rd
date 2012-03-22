@@ -3,7 +3,7 @@
 \title{Determines how close estimates are to a true value}
 
 \description{
-Function used in \code{proLik} when constructing profile likelihoods.  This determines between which variance estimates a confidence limit sits and if this is within a certain threshold.
+Function used when constructing profile likelihoods.  This determines between which variance estimates a confidence limit sits and if this is within a certain threshold.
 }
 
 \usage{findBetween(x, output, side = "L", threshb)}
@@ -19,4 +19,4 @@ Function used in \code{proLik} when constructing profile likelihoods.  This dete
 
 \author{\email{matthewwolak@gmail.com}}
 
-\seealso{See Also \code{\link{proLik}}}
+\seealso{See Also \code{proLik}}

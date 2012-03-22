@@ -4,7 +4,10 @@ aiFun <- function(model = NULL, AI.vec = NULL, inverse = TRUE, Dimnames=NULL)
     AI.vec <- model$ai
   }
 
-  AI.cov <- Tri2M(AI.vec, lower.tri = FALSE, reverse = TRUE) 
+  dimAI <- sqrt(length(AI.vec) * 2 + 0.25) - 0.5
+  AI.cov <- matrix(0, dimAI, dimAI)
+  AI.cov[which(upper.tri(AI.cov, diag = TRUE) == TRUE)] <- AI.vec
+  AI.cov[which(lower.tri(AI.cov) == TRUE)]<-t(AI.cov)[which(lower.tri(AI.cov) == TRUE)]
     if(inverse == FALSE) AI.cov <- solve(AI.cov)    
  
   AI.cor <- cov2cor(AI.cov)
@@ -13,6 +16,8 @@ aiFun <- function(model = NULL, AI.vec = NULL, inverse = TRUE, Dimnames=NULL)
   AI.mat[lower.tri(AI.cov, diag=TRUE)] <- AI.cov[lower.tri(AI.cov, diag=TRUE)]
   if(is.null(Dimnames)){Dimnames <- names(model$gammas)}
   dimnames(AI.mat) <- list(Dimnames, Dimnames)
-return(round(AI.mat, 5))
+       
+
+return(AI = round(AI.mat, 5))
 }
 

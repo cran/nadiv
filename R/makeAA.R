@@ -1,6 +1,7 @@
 makeAA <- function(pedigree)
 {
-  A <- makeA(pedigree)
+  if(dim(pedigree)[1] < 3000) meth <- "fast" else meth <- "flowmem"
+  A <- makeA(pedigree, method = meth)
   AA <- A*A
   logDet <- determinant(AA, logarithm = TRUE)$modulus[1]
   AAinv <- as(solve(AA), "dgCMatrix")

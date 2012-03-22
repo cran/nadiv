@@ -1,5 +1,5 @@
-\name{choose}
-\alias{choose}
+\name{chooser}
+\alias{chooser}
 \title{Internal function for \code{makeDsim}
 }
 \description{

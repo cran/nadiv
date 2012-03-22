@@ -1,4 +1,4 @@
-proLik <- function(full.model, component, negative = FALSE, nsample.units = 4, nse = 2, alpha = 0.05, threshold = 0.05)
+proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.units = 4, nse = 2, alpha = 0.05, threshold = 0.001, parallel = FALSE, ncores = getOption("cores"))
 {
 
   df.in <- 1
@@ -8,21 +8,24 @@ proLik <- function(full.model, component, negative = FALSE, nsample.units = 4, n
       df.in <- 0.5      	
       }
 
+  s2 <- full.model$sigma2
   gamma.ind <- which(names(full.model$gammas) == component)
-  estimate <- summary(full.model)$varcomp$component[gamma.ind]
-  thresh <- abs(estimate * threshold)
-  std.err <- summary(full.model)$varcomp$std.error[gamma.ind]
-    low.limit <- (estimate - std.err * nse)
-      if(estimate > 0 & low.limit < 0 & negative == FALSE) low.limit <- 0 
-    bit1 <- seq(low.limit, estimate, length = nsample.units * 2)
-    bit2 <- seq(estimate, (estimate + std.err * (nse * 2)), length = (nsample.units * 3)+1)
-  sample.vec <- c(bit1, bit2)
-  Vr.est <- full.model$sigma2
-  gamma.vec <- sample.vec/Vr.est
+  gamma.est <- full.model$gammas[gamma.ind]
+  std.err <- sqrt(aiFun(model = full.model)[gamma.ind, gamma.ind])
+  thresh <- abs(gamma.est * threshold)
+    low.limit <- (gamma.est - std.err * nse)
+      if(gamma.est > 0 & low.limit < 0 & negative == FALSE) low.limit <- 0 
+    bit1 <- seq(low.limit, gamma.est, length = nsample.units * 2)
+    bit2 <- seq(gamma.est + (gamma.est*0.005), (gamma.est + std.err * (nse * 2)), length = (nsample.units * 3)+1)
+  gamma.vec <- c(bit1, bit2)
   full.mod2 <- update.asreml(object = full.model, start.values = TRUE)$gammas.table
 
-
-  profile <- list(lambdas = vapply(gamma.vec, FUN = constrainFun, FUN.VALUE = vector("numeric", length = 1), full = full.model, fm2 = full.mod2, comp = component), var.estimates = sample.vec)
+  if(parallel){
+    require(multicore)
+    profile <- list(lambdas = pvec(v = seq(1,length(gamma.vec),1), FUN = parConstrainFun, parameters = gamma.vec, full = full.model, fm2 = full.mod2, comp = component, G = G, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE), var.estimates = gamma.vec)
+    } else{
+    profile <- list(lambdas = vapply(gamma.vec, FUN = constrainFun, FUN.VALUE = vector("numeric", length = 1), full = full.model, fm2 = full.mod2, comp = component, G = G), var.estimates = gamma.vec)
+      }
 
   chi.val <- -0.5 * qchisq(alpha, df = df.in, lower.tail = FALSE)
   leng.L <- length(bit1)
@@ -54,13 +57,17 @@ proLik <- function(full.model, component, negative = FALSE, nsample.units = 4, n
           UCI.tmp <- list(more = TRUE, hilo = NULL)
           Uprof.tmp <- list(lambdas = Uprofile$lambdas[UCI$hilo], var.estimates = Uprofile$var.estimates[UCI$hilo])
           while(UCI.tmp$more){
-            tmp.sample.vec <- seq(Uprof.tmp$var.estimates[1], Uprof.tmp$var.estimates[2], length = 8)
-            tmp.gamma.vec <- tmp.sample.vec/Vr.est
-            tmp.lambdas <- vapply(tmp.gamma.vec, FUN = constrainFun, FUN.VALUE = vector("numeric", length = 1), full = full.model, fm2 = full.mod2, comp = component)
-            UCI.tmp <- findBetween(x = chi.val, output = list(lambdas = tmp.lambdas, var.estimates = tmp.sample.vec), side = "U", threshb = thresh)
+            tmp.gamma.vec <- seq(Uprof.tmp$var.estimates[1], Uprof.tmp$var.estimates[2], length = 8)
+            if(parallel){
+              tmp.lambdas <- pvec(v = seq(1,length(tmp.gamma.vec),1), FUN = parConstrainFun, parameters = tmp.gamma.vec, full = full.model, fm2 = full.mod2, comp = component, G = G, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
+            } else{
+              tmp.lambdas <- vapply(tmp.gamma.vec, FUN = constrainFun, FUN.VALUE = vector("numeric", length = 1), full = full.model, fm2 = full.mod2, comp = component, G = G)
+             }
+
+            UCI.tmp <- findBetween(x = chi.val, output = list(lambdas = tmp.lambdas, var.estimates = tmp.gamma.vec), side = "U", threshb = thresh)
             Uprof.leng <- length(Uprofile$lambdas)
             Uprofile$lambdas <- c(Uprofile$lambdas, tmp.lambdas)
-	    Uprofile$var.estimates <- c(Uprofile$var.estimates, tmp.sample.vec)
+	    Uprofile$var.estimates <- c(Uprofile$var.estimates, tmp.gamma.vec)
             if(UCI.tmp$more){
               Uprof.tmp <- list(lambdas = Uprofile$lambdas[Uprof.leng + UCI.tmp$hilo], var.estimates = Uprofile$var.estimates[Uprof.leng + UCI.tmp$hilo])
             } else break
@@ -87,13 +94,16 @@ proLik <- function(full.model, component, negative = FALSE, nsample.units = 4, n
           LCI.tmp <- list(more = TRUE, hilo = NULL)
           Lprof.tmp <- list(lambdas = Lprofile$lambdas[LCI$hilo], var.estimates = Lprofile$var.estimates[LCI$hilo])
           while(LCI.tmp$more){
-            tmp.sample.vec <- seq(Lprof.tmp$var.estimates[2], Lprof.tmp$var.estimates[1], length = 8)
-            tmp.gamma.vec <- tmp.sample.vec[-c(1,10)]/Vr.est
-            tmp.lambdas <- vapply(tmp.gamma.vec, FUN = constrainFun, FUN.VALUE = vector("numeric", length = 1), full = full.model, fm2 = full.mod2, comp = component)
-            LCI.tmp <- findBetween(x = chi.val, output = list(lambdas = tmp.lambdas, var.estimates = tmp.sample.vec), side = "L", threshb = thresh)
+            tmp.gamma.vec <- seq(Lprof.tmp$var.estimates[2], Lprof.tmp$var.estimates[1], length = 8)
+            if(parallel){
+              tmp.lambdas <- pvec(v = seq(1,length(tmp.gamma.vec),1), FUN = parConstrainFun, parameters = tmp.gamma.vec, full = full.model, fm2 = full.mod2, comp = component, G = G, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
+            } else{
+                tmp.lambdas <- vapply(tmp.gamma.vec, FUN = constrainFun, FUN.VALUE = vector("numeric", length = 1), full = full.model, fm2 = full.mod2, comp = component, G = G)
+                }
+            LCI.tmp <- findBetween(x = chi.val, output = list(lambdas = tmp.lambdas, var.estimates = tmp.gamma.vec), side = "L", threshb = thresh)
             Lprof.leng <- length(Lprofile$lambdas)
             Lprofile$lambdas <- c(Lprofile$lambdas, tmp.lambdas)
-	    Lprofile$var.estimates <- c(Lprofile$var.estimates, tmp.sample.vec[-c(1,10)])
+	    Lprofile$var.estimates <- c(Lprofile$var.estimates, tmp.gamma.vec)
             if(LCI.tmp$more){
                Lprof.tmp <- list(lambdas = Lprofile$lambdas[Lprof.leng + LCI.tmp$hilo], var.estimates = Lprofile$var.estimates[Lprof.leng + LCI.tmp$hilo])
             } else break
@@ -131,6 +141,6 @@ proLik <- function(full.model, component, negative = FALSE, nsample.units = 4, n
     }
 
 
-return(list(lambdas = clambdas, var.estimates = cvar.estimates, UCL = Upper.limit, LCL = Lower.limit, component = component))
+return(list(lambdas = clambdas, var.estimates = cvar.estimates * s2, UCL = Upper.limit * s2, LCL = Lower.limit * s2, component = component))
 }
 

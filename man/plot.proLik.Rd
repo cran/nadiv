@@ -2,12 +2,12 @@
 \alias{plot.proLik}
 \alias{plot}
 
-\title{Graphically depicts the profile Likelihood}
+\title{Plot profile Likelihood}
 
-\description{This function plots the output from a \code{proLik} object.}
+\description{This function graphically depicts the output from a \code{proLik} object.}
 
 \usage{
-  \method{plot}{proLik}(x, CL = TRUE, alpha = 0.05, type = "l", \dots)
+  \method{plot}{proLik}(x, CL = TRUE, alpha = 0.05, type = "l", ...)
 }
 
 \arguments{
@@ -21,6 +21,6 @@
 \author{\email{matthewwolak@gmail.com}}
 
 
-\seealso{\code{\link{proLik}}}
+\seealso{\code{proLik}}
 
-\examples{##See examples in \code{\link{proLik}}}
+\examples{##See examples in \code{proLik}}

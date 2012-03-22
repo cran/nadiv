@@ -12,7 +12,7 @@ makeAA(pedigree)
 A pedigree where the columns are ordered ID, Dam, Sire}
 }
 \details{
-Missing parents (e.g., base population) should be denoted by either 'NA' or '0'.
+Missing parents (e.g., base population) should be denoted by either 'NA', '0', or '*'.
 
 The function first estimates the A matrix using \code{\link{makeA}}, then it calculates the Hadamard (element-wise) product of the A matrix with itself (A # A).}
 

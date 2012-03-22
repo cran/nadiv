@@ -6,12 +6,20 @@ Finds the double first cousins in a pedigree}
 Given a pedigree, all pairs of individuals that are double first cousins are returned.}
 
 \usage{
-findDFC(pedigree)
+findDFC(pedigree, parallel = FALSE, ncores = getOption("cores"))
 }
 
 \arguments{
   \item{pedigree }{
 A pedigree with columns organized: ID, Dam, Sire}
+  \item{parallel }{
+A logical statement indicating if parallelization should be attempted.  Note, only reliable for Mac and Linux operating systems.}
+  \item{ncores }{
+Number of cpus to use, default is maximum available}
+}
+
+\details{
+If \code{parallel} = TRUE then the pacakge \code{multicore} must be loaded.
 }
 
 \value{
