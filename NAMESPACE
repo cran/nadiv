@@ -1,4 +1,4 @@
-useDynLib(nadiv, dij)
-import(Matrix, MCMCglmm, pedigreemm)
-export(makeA, makeD, makeDsim, makeAA, makeDomEpi, sm2list, aiFun, numPed, genAssign, DFC, findDFC, proLik, plot.proLik, findBetween)
+useDynLib(nadiv, dij, a_ml)
+import(Matrix, pedigreemm)
+export(makeA, makeD, makeDsim, makeAA, makeDomEpi, sm2list, aiFun, numPed, genAssign, IBD, IBD2, vchoose, chooser, SEfun, DFC, findDFC, proLik, plot.proLik, findBetween, constrainFun, parConstrainFun, wrap_dij, aiCI, varTrans)
 

@@ -7,8 +7,17 @@
 numPed<-function(pedigree)
 {
       
-  if(length(which(pedigree[, 2] == 0)) > 0) pedigree[which(pedigree[, 2] == 0), 2] <- NA
-  if(length(which(pedigree[, 3] == 0)) > 0) pedigree[which(pedigree[, 3] == 0), 3] <- NA
+  if(length(which(pedigree[, 2] == 0)) > 0){
+    pedigree[which(pedigree[, 2] == 0), 2] <- NA
+    warning("Zero in the dam column interpreted as a missing parent")
+  }
+  if(length(which(pedigree[, 3] == 0)) > 0){
+    pedigree[which(pedigree[, 3] == 0), 3] <- NA
+    warning("Zero in the sire column interpreted as a missing parent")
+  }
+  if(length(which(pedigree[,2] == "*")) > 0) pedigree[which(pedigree[, 2] == "*"), 2] <- NA
+  if(length(which(pedigree[,3] == "*")) > 0) pedigree[which(pedigree[, 3] == "*"), 3] <- NA
+
 
 
   if (all(is.na(pedigree[, 2])) & all(is.na(pedigree[, 3]))) {

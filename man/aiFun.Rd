@@ -19,6 +19,7 @@ A logical indicating whether the elements of the Average Information matrix are 
   \item{Dimnames }{
 A vector of characters if names are desired for the output (co)variance/correlation matrix.  If not specified, either the default labels from the \code{asreml} object will be used or the rows and columns will be un-labeled.}
 }
+
 \details{
 The inverse of the Average Information matrix provides the sampling (co)variance of each random term in the mixed model.  If a model from the ASReml-R function is supplied (\code{model} is not NULL), this function extracts the inverse of the AI matrix from an ASReml-R model and organizes it so that the sampling covariances between random terms are located below the diagonal, the sampling variances of random terms are located along the diagonal, and the sampling correlations between random terms are located above the diagonal.  The order of the variances along the diagonal is the same as the order entered in the random section of the \code{asreml} function.  This is also the same order as the rows of a call to the summary function, \code{summary(model)$varcomp}.
 
@@ -41,7 +42,8 @@ The vector of \code{Dimnames} should match the same order of variance components
     ginvA <- asreml.Ainverse(warcolak)$ginv
     ginvD <- makeD(warcolak[,1:3])$listDinv
     warcolak$IDD <- warcolak$ID
-    warcolak.mod <- asreml(trait1 ~ 1, random = ~ped(ID) + giv(IDD), ginverse = list(ID = ginvA, IDD = ginvD), data = warcolak) 
+    warcolak.mod <- asreml(trait1 ~ 1, random = ~ped(ID) + giv(IDD), 
+	ginverse = list(ID = ginvA, IDD = ginvD), data = warcolak) 
     summary(warcolak.mod)$varcomp
     aiFun(model = warcolak.mod, Dimnames = c("Va", "Vd", "Ve"), inverse = TRUE)    
    }

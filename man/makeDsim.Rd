@@ -1,29 +1,37 @@
 \name{makeDsim}
 \alias{makeDsim}
 \title{
-Creates the dominance genetic relationship matrix through simulation}
+Creates the dominance genetic relationship matrix through iteration}
 \description{
-Given a pedigree, the matrix of coefficients of fraternity are returned - the D matrix - as well as a simulated set of coefficients of fraternity (Ovaskainen et al. 2008).}
+Alleles are explicitly traced through a pedigree to obtain coefficients of fraternity between pairs of individuals (the probability of sharing both alleles identical by descent).  This is accomplished in an iterative process to account for the various routes by which an allele will progress through a pedigree due to Mendelian sampling.  This is an implementation of the simulation approach of Ovaskainen et al. (2008).}
 \usage{
-makeDsim(pedigree, N, invertD = FALSE, calcSE = FALSE)
+makeDsim(pedigree, N, parallel = FALSE, ncores = getOption("cores"),
+         invertD = FALSE, calcSE = FALSE, returnA = FALSE)
 }
 
 \arguments{
   \item{pedigree }{
 A pedigree with columns organized: ID, Dam, Sire}
   \item{N }{
-The number of times to simulate genotypes for the pedigree}
+The number of times to iteratively trace alleles through the pedigree}
+  \item{parallel }{
+A logical indicating whether or not to use parallel processing.  Note, this may only be available for Mac and Linux operating systems.}
+  \item{ncores }{
+The number of cpus to use when constructing the dominance relatedness matrix.  Default is all available.}
   \item{invertD }{
 A logical indicating whether or not to invert the D matrix}
   \item{calcSE }{
 A logical indicating whether or not the standard errors for each coefficient of fraternity should be calculated}
+  \item{returnA }{
+Logical, indicating if the numerator relationship matrix (A) should be stored and returned.}
 }
 
 \details{
-Missing parents (e.g., base population) should be denoted by either 'NA' or '0'.
+Missing parents (e.g., base population) should be denoted by either 'NA', '0', or '*'.
 
+If \code{parallel} = TRUE then the pacakge \code{multicore} must be loaded.
 
-Ovaskainen et al. (2008) indicated that the method of calculating the D matrix (see \code{\link{makeD}}) is only an approximation.  They proposed a simulation method that is implemented here.  This should be more appropriate when inbreeding occurs in the pedigree. 
+Ovaskainen et al. (2008) indicated that the method of calculating the D matrix (see \code{\link{makeD}}) is only an approximation.  They proposed a simulation method that is implemented here.  This should be more appropriate, especially when inbreeding occurs in the pedigree. 
 
 The value, \code{listDsim} will list both the approximate values (returned from \code{\link{makeD}}) as well as the simulated values.  If \code{calcSE} is TRUE, these values will be listed in \code{listDsim}.
 }
@@ -56,6 +64,6 @@ This simulation can take a long time for large values of \code{N}.  If unsure, i
 
 
 \examples{
-  simDinvMat <- makeDsim(Mrode9, N = 1000, invertD = FALSE, calcSE = TRUE)$listDsim
+  simDinvMat <- makeDsim(Mrode9, N = 1000, parallel = FALSE, invertD = FALSE, calcSE = TRUE)$listDsim
 }
 
