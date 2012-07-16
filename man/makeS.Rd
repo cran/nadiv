@@ -1,30 +1,32 @@
 \name{makeS}
 \alias{makeS}
-\title{Creates the additive genetic relationship matrix for the sex chromosomes
+\title{Creates the additive genetic relationship matrix for the shared sex chromosomes
 }
-\description{This is a preliminary function and may still contain some errors.  The function returns the inverse of the additive relationship matrix in sparse matrix format for the sex chromosomes (i.e., either X or Z).
+\description{The function returns the inverse of the additive relationship matrix in sparse matrix format for the sex chromosomes (e.g., either X or Z).
 }
 \usage{
-makeS(pedigree, heterogametic = "0", DosageComp = c(NULL, "ndc", "hoin"), returnS = FALSE)
+makeS(pedigree, heterogametic = "0", DosageComp = c(NULL, "ngdc",
+"hori", "hedo", "hoha", "hopi"), returnS = FALSE)
 }
 \arguments{
   \item{pedigree }{
 A pedigree where the columns are ordered ID, Dam, Sire, Sex}
   \item{heterogametic }{
-Character indicating the label corresponding to the heterogametic sex used in the "Sex" column}
+Character indicating the label corresponding to the heterogametic sex used in the "Sex" column of the pedigree}
   \item{DosageComp }{
-A character indicating whether a model of no dosage compensation ("ndc") or homozygous inactivation ("hoin") should be used.  The former ("ndc") follows the algorithm presented in Fernando and Grossman (1990) and has been validated.  However, the latter ("hoin") is still being validated and results should be used cautiously.  If "NULL" then the "ndc" model is assumed.
+A character indicating which model of dosage compensation.  If "NULL" then the "ngdc" model is assumed.
 } 
   \item{returnS }{
-Logical statement, indicating if the relationship matrix should be constructed in addition to the inverse}
+Logical statement, indicating if the relationship matrix should be constructed in addition to the inverse
+}
 }
 
 \details{
 Missing parents (e.g., base population) should be denoted by either 'NA', '0', or '*'.
 
-The inverse of the sex-chromosome additive genetic relationship matrix (S-matrix) is constructed according to the algorithm presented in Fernando & Grossman (1990).  Additionally, the S-matrix itself can be constructed (although this takes much longer than computing S-inverse directly).
+The inverse of the sex-chromosome additive genetic relationship matrix (S-matrix) is constructed implementing the Meuwissen and Luo (1992) algorithm to directly construct inverse additive relationship matrices (borrowing code from Jarrod Hadfield's MCMCglmm function, \code{inverseA}) and using equations presented in Fernando & Grossman (1990; see Wolak et al. 2013).  Additionally, the S-matrix itself can be constructed (although this takes much longer than computing S-inverse directly).
 
-The algorithm in Fernando & Grossman (1990) does not account for any form of sex chromosome dosage compensation mechanism.  I have implemented one model, random X-inactivation (i.e., lyonization), in an attempt for more congruence with the biology of many organisms (e.g., eutherian mammals).  This second model of random inactivation in the homozygous sex is still preliminary and has yet to be properly peer reviewed. 
+The choices of dosage compensation models are: no global dosage compensation ("ngdc"), random inactivation in the homogametic sex ("hori"), doubling of the single shared sex chromosome in the heterogametic sex ("hedo"), halving expression of both sex chromosomes in the homogametic sex ("hoha"), or inactivation of the paternal sex chromosome in the homogametic sex ("hopi"). 
 }
 
 
@@ -33,10 +35,16 @@ The algorithm in Fernando & Grossman (1990) does not account for any form of sex
   \item{S }{the sex-chromosome relationship matrix in sparse matrix form or NULL if \code{returnS} = FALSE}
   \item{Sinv }{the inverse of the S matrix in sparse matrix form}
   \item{listSinv }{the three column form of the non-zero elements for the inverse of the S matrix}
+  \item{inbreeding }{the sex-linked inbreeding coefficients for all individuals in the pedigree}
+  \item{v }{a vector of the Mendelian sampling variances for a sex-linked locus}
 }
 
 \references{
+Wolak, M.E., D.A. Roff, and D.J. Fairbairn. in prep. The contribution of sex chromosomal additive genetic (co)variation to the phenotypic resemblance between relatives under alternative models of dosage compensation.
+
 Fernando, R.L. & Grossman, M. 1990. Genetic evaluation with autosomal and X-chromosomal inheritance. Theoretical and Applied Genetics, 80:75-80.
+
+Meuwissen, T.H.E. and Z. Luo. 1992. Computing inbreeding coefficients in large populations. Genetics, Seleciton, Evolution, 24:305-313.
 }
  
 

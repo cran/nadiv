@@ -4,7 +4,8 @@
 \title{
 Generation assignment}
 \description{
-Given a pedigree, the function assigns the generation number each individual belongs in.}
+Given a pedigree, the function assigns the generation number to which each individual belongs.}
+
 \usage{
 genAssign(pedigree)
 }
@@ -13,12 +14,11 @@ genAssign(pedigree)
 }
 }
 \details{
-Zero is the base population.  
+0 is the base population.  
 
-Adapted from \code{kindepth} function in \code{kinship}
+Migrants, or any individuals where both parens are unknown, are assigned to generation zero.  If parents of an individual are from two different generations (e.g., mom = 0 and dad = 1), the individual is assigned to the generation following the greater of the two parents (e.g., 2 in this example).
 } 
 
-\seealso{\code{kinship}}
 
 \value{
 A vector of values is returned.  This vector is in the same order as the ID column of the pedigree.

@@ -1,4 +1,24 @@
 useDynLib(nadiv)
 import(Matrix)
-export(aiCI, aiFun, constrainFun, DFC, findDFC, genAssign, makeA, makeAA, makeD, makeDomEpi, makeDsim, makeS, numPed, parConstrainFun, plot.proLik, proLik, sm2list, varTrans)
-
+export(aic,
+aiCI,
+aiFun,
+constrainFun,
+drfx,
+findDFC,
+genAssign,
+grfx,
+makeA,
+makeAA,
+makeD,
+makeDomEpi,
+makeDsim,
+makeS,
+numPed,
+parConstrainFun,
+plot.proLik,
+proLik,
+simPedDFC,
+simPedHS,
+sm2list,
+varTrans)
