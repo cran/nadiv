@@ -4,7 +4,7 @@
 \description{
 Given a pedigree, the matrix of additive by dominance (AD) genetic relatedness, dominance by dominance (DD) genetic relatedness, or both are returned.}
 \usage{
-makeDomEpi(pedigree, output = c("AD", "DD", "both"), parallel = FALSE, Dinverse=FALSE)
+makeDomEpi(pedigree, output = c("AD", "DD", "both"), parallel = FALSE, Dinverse=FALSE, det = FALSE)
 }
 \arguments{
   \item{pedigree }{
@@ -18,6 +18,10 @@ A logical indicating whether or not to use parallel processing.  Note, this may 
 
   \item{Dinverse }{
 A logical indicating whether or not to invert the D matrix}
+
+  \item{det }{
+A logical indicating whether or not to return the determinants for the epistatic relationship  matrices}
+
 }
 
 

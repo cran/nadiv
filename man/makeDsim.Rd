@@ -6,7 +6,7 @@ Creates the dominance genetic relationship matrix through iteration}
 Alleles are explicitly traced through a pedigree to obtain coefficients of fraternity between pairs of individuals (the probability of sharing both alleles identical by descent).  This is accomplished in an iterative process to account for the various routes by which an allele will progress through a pedigree due to Mendelian sampling.  This is an implementation of the simulation approach of Ovaskainen et al. (2008).}
 \usage{
 makeDsim(pedigree, N, parallel = FALSE, ncores = getOption("cores"),
-         invertD = FALSE, calcSE = FALSE, returnA = FALSE)
+         invertD = TRUE, calcSE = FALSE, returnA = FALSE)
 }
 
 \arguments{
@@ -64,6 +64,6 @@ This simulation can take a long time for large values of \code{N}.  If unsure, i
 
 
 \examples{
-  simDinvMat <- makeDsim(Mrode9, N = 1000, parallel = FALSE, invertD = FALSE, calcSE = TRUE)$listDsim
+  simDinv <- makeDsim(Mrode9, N = 1000, parallel = FALSE, invertD = TRUE, calcSE = TRUE)$listDsim
 }
 

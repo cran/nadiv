@@ -32,6 +32,6 @@ The function first estimates the A matrix using \code{\link{makeA}}, then it cal
 }
 
 \examples{
-  AAoutput <- makeAA(Mrode2)
+  makeAA(Mrode2)
 }
 
