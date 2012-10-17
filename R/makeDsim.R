@@ -1,76 +1,63 @@
-makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("cores"), invertD = FALSE, calcSE = FALSE, returnA = FALSE)
-{
-  numeric.pedigree <- numPed(pedigree)
+makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("cores"), invertD = TRUE, calcSE = FALSE, returnA = FALSE){
+
+  approxD <- makeD(pedigree, parallel = parallel, ncores = ncores, invertD = invertD, returnA = returnA)
+  lapproxD <- summary(approxD$D)
+
+  numped <- numPed(pedigree)
   n <- dim(pedigree)[1]
   alleles <- matrix(as.integer(-998), nrow = n, ncol=2) 
-  dfounders <- which(numeric.pedigree[, 2] == -998)
-  sfounders <- which(numeric.pedigree[, 3] == -998)
-  uniqp <- c(unique(numeric.pedigree[, 2])[-1], unique(numeric.pedigree[, 3])[-1])
+  dfounders <- which(numped[, 2] == -998)
+  sfounders <- which(numped[, 3] == -998)
+  uniqp <- c(unique(numped[, 2])[-1], unique(numped[, 3])[-1])
   ndfounders <- length(dfounders)
-  nsfounders <- length(sfounders)
-
+  
   alleles[dfounders, 1] <- as.integer(seq(1, ndfounders, 1)) 
-  alleles[sfounders, 2] <- as.integer(seq(ndfounders+1, (ndfounders + nsfounders), 1))
-  nonfounders <-  which(alleles == -998)
-  segregation <- matrix(as.integer(ceiling(runif(length(nonfounders)*N, min = 0, max = 2))),ncol=N)
-  dalleles <- matrix(alleles[,1], nrow = dim(alleles)[1], ncol = N)
-  salleles <- matrix(alleles[,2], nrow = dim(alleles)[1], ncol = N)
+  alleles[sfounders, 2] <- as.integer(seq(ndfounders+1, (ndfounders + length(sfounders)), 1))
+  dalleles <- rep(alleles[, 1], each = N)
+  salleles <- rep(alleles[, 2], each = N)
+  
+  cat(paste("making Dsim ..."))
 
-  approxD.tmp <- makeD(pedigree, parallel = parallel, ncores = ncores, invertD = invertD, returnA = returnA)
-  approxD <- sm2list(approxD.tmp$D, colnames = c("row", "column", "D"))
-  D.nonself <- which(approxD[,3] < 1) 
-  approxD.nonself <- approxD[D.nonself,]
-  simD.nonself <- matrix(NA, nrow = dim(approxD.nonself)[1], ncol = N) 
+  Cout <- .C("dsim",
+	as.integer(dalleles),
+	as.integer(salleles),
+	as.integer(N),
+	as.integer(n),
+	as.integer(numped[, 2] - 1),
+	as.integer(numped[, 3] - 1),
+	as.integer(approxD$D@i),
+	as.integer(approxD$D@p),
+	as.integer(rep(0, length(approxD$D@i))))
 
-cat(paste("making Dsim ..."))
-    start <- 1
-    order.ind <- order(uniqp)
-    uniqp <- uniqp[order.ind]
-    for(j in uniqp){
-      mothered <- NULL
-      fathered <- NULL
-      if(any(numeric.pedigree[,2] == j)) mothered <- which(numeric.pedigree[,2] == j)
-      if(any(numeric.pedigree[,3] == j)) fathered <- which(numeric.pedigree[,3] == j)
-      jalleles <- rbind(dalleles[j, ], salleles[j, ])
-      lmom <- length(mothered)
-      lfath <- length(fathered)
-      segregation.tmp <- matrix(segregation[start:(start - 1 + lmom + lfath), ], ncol = N)
-      jgametes <- matrix(as.integer(vapply(1:(lmom+lfath), FUN = vchoose, FUN.VALUE = vector("numeric", N), N = N, which2 = segregation.tmp, values2 = jalleles)), ncol = N, byrow = TRUE) 
-      start <- start + lmom + lfath 
-     if(!is.null(mothered)) dalleles[mothered, ] <- as.integer(jgametes[1:lmom, ])
-     if(!is.null(fathered)) salleles[fathered, ] <- as.integer(jgametes[(lmom + 1):lfath, ])
-    }
-
-  stack.alleles<-rbind(dalleles, salleles)
-  simD.nonself <- apply(stack.alleles, MARGIN = 2, FUN = IBD2, pairs = approxD.nonself[,1:2], n=n) 
-  approxD.nonself$simD <- apply(simD.nonself, MARGIN = 1, FUN = mean)
+  lapproxD$simD <- Cout[[9]] / N
+  lapproxD <- lapproxD[which(lapproxD[, 4] != 0), ]
   listDsim <- NULL
   if(calcSE) {
-     approxD.nonself$Dse <- vapply(approxD.nonself$simD, FUN = SEfun, FUN.VALUE = vector("numeric", 1), N)
-     listDsim <- approxD.nonself
-   } 
+     lapproxD$Dse <- vapply(lapproxD$simD, FUN = function(x, N){(sqrt(x * (1 - x))) / sqrt(N)}, FUN.VALUE = vector("numeric", 1), N)
+     listDsim <- lapproxD
+  } 
 
-  Dsim.row<-c(approxD.nonself[,1], 1:n)
-  Dsim.col<-c(approxD.nonself[,2], 1:n)
-  Dsim.x<-c(approxD.nonself[,4], rep(1, n))
+  Dsim.row<- lapproxD[,1]
+  Dsim.col<- lapproxD[,2]
+  Dsim.x<- lapproxD[,4]
   order.index<-order(Dsim.col + Dsim.row/(n+1), decreasing=FALSE)
   Dsim<-Matrix(0, n, n)
-  Dsim@uplo<-"L"
+  Dsim@uplo<-"U"
   Dsim@i<-as.integer(Dsim.row[order.index]-1)
   Dsim@p<-as.integer(c(match(1:n, Dsim.col[order.index]), length(order.index)+1)-1)
   Dsim@x<-Dsim.x[order.index]
-cat(paste(".done", "\n"))
+  diag(Dsim) <- diag(approxD$D)
+  cat(paste(".done", "\n"))
   logDetDsim <- determinant(Dsim, logarithm = TRUE)$modulus[1]
-
- 
+  
   if(invertD){
     Dsiminv<-solve(Dsim)
     Dsiminv@Dimnames <- list(pedigree[,1], NULL)
     listDsiminv<-sm2list(Dsiminv, rownames=pedigree[,1], colnames=c("row", "column", "simDinverse"))
     Dsim <- as(Dsim, "dgCMatrix")
- return(list(A=approxD.tmp$A, D=approxD.tmp$D, logDetD = approxD.tmp$logDet, Dinv=approxD.tmp$Dinv, listDinv=approxD.tmp$listDinv, Dsim=Dsim, logDetDsim = logDetDsim, Dsiminv=Dsiminv, listDsim=listDsim, listDsiminv=listDsiminv))
+    return(list(A=approxD$A, D=approxD$D, logDetD = approxD$logDet, Dinv=approxD$Dinv, listDinv=approxD$listDinv, Dsim=Dsim, logDetDsim = logDetDsim, Dsiminv=Dsiminv, listDsim=listDsim, listDsiminv=listDsiminv))
   } else{
-    return(list(A=approxD.tmp$A, D=approxD.tmp$D, logDetD = approxD.tmp$logDet, Dsim=Dsim, logDetDsim = logDetDsim, listDsim=listDsim))
+      return(list(A=approxD$A, D=approxD$D, logDetD = approxD$logDet, Dsim=Dsim, logDetDsim = logDetDsim, listDsim=listDsim))
     } 
 
 }

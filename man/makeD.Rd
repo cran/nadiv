@@ -6,7 +6,7 @@
 }
 \usage{
 makeD(pedigree, parallel = FALSE, ncores = getOption("cores"),
-      invertD = TRUE, Amethod = NULL, returnA = FALSE)
+      invertD = TRUE, returnA = FALSE, det = FALSE)
 }
 \arguments{
   \item{pedigree }{
@@ -21,11 +21,11 @@ Number of cores to use when parallel = TRUE.  Default is maximum available.  Oth
   \item{invertD }{
 A logical indicating whether or not to invert the D matrix}
 
-  \item{Amethod }{
-Either NULL or a character string, indicating the method to be used when creating the A matrix.  If NULL and the pedigree is greater than 3000 individuals, the "flowmem" method will be used.  If NULL and the pedigree is less than 3000, the "fast" method will be used.  See \code{\link{makeA}} for more details on the methods.} 
-
   \item{returnA }{
 Logical, indicating if the numerator relationship matrix (A) should be stored and returned.}
+
+  \item{det }{
+Logical, indicating if the determinant of the D matrix should be returned.}
 
 }
 \details{

@@ -15,6 +15,9 @@ findDFC<-function(pedigree, parallel = FALSE, ncores = getOption("cores"))
 
   if(parallel) {
     require(multicore)
+    wrap_DFC <- function(x, grandparents){
+    apply(grandparents[min(x):max(x), ], MARGIN = 1, FUN = DFC)
+}
     dfcs.vec <- pvec(seq(1,dim(gps)[1]), FUN = wrap_DFC, grandparents = gps, mc.set.seed = FALSE, mc.silent = TRUE, mc.cores = ncores, mc.cleanup = TRUE)
     } else{ dfcs.vec <- apply(gps, MARGIN = 1, FUN = DFC)}
   indexed <- cbind(ps.noFS, dfcs.vec)

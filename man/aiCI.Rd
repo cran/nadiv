@@ -37,6 +37,7 @@ The vector of \code{Dimnames} should match the same order of variance components
 
 \seealso{
 \code{\link{aiFun}}
+\code{\link{proLik}}
 }
 
 \examples{

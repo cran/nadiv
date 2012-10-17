@@ -5,7 +5,7 @@
 \description{From a sparse matrix object, the three column, row ordered lower triangle of non-zero elements is created.  Mostly used within other functions (i.e., \code{makeD})
 }
 \usage{
-sm2list(A = NULL, rownames = NULL, colnames = c("row", "column", "A"))
+sm2list(A, rownames = NULL, colnames = c("row", "column", "A"))
 }
 \arguments{
   \item{A }{

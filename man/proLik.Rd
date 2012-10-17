@@ -11,19 +11,19 @@ When a mixed model is run in ASReml-R, this function can estimate the profile li
 
 \usage{
 proLik(full.model, component, G = TRUE, negative = FALSE, 
-       nsample.units = 4, nse = 2, alpha = 0.05, threshold = 0.001,
+       nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 0.001,
        parallel = FALSE, ncores = getOption("cores"))
 }
 
 \arguments{
   \item{full.model }{An \code{asreml} model object}
-  \item{component }{A character vector indicating for which variance component the profile likelihood will be constructed.  Must be an object in \code{full.model$gammas}.}
+  \item{component }{A character indicating for which variance component the profile likelihood will be constructed.  Must be an object in \code{full.model$gammas}.}
   \item{G }{Logical indicating whether component is part of the G structure.  If the component is part of the R structure, G = FALSE.}
   \item{negative }{Logical indicating whether or not the \code{component} can take on a negative value (i.e., a covariance)}
-  \item{nsample.units }{Number of sample units to be used in constructing the profile likelihood}
-  \item{nse }{Number of standard errors on either side of the estimate, over which the profile likelihood should be constructed}
+  \item{nsample.units }{Number of sample units to be used in constructing the area between the confidence limits for the profile likelihood}
+  \item{nse }{Number of standard errors on either side of the estimate, over which the confidence limits should be evaluated.}
   \item{alpha }{The critical value for determining the Confidence Interval}
-  \item{threshold }{Acceptable distance, between actual sample values and interpolated values, for determining the upper and lower limits of the Confidence Interval.  Expressed as a percentage of the parameter estimate.  Actual sample points will be no more than this distance from the true value of the estimate}
+  \item{tolerance }{Acceptable distance, between actual sample values and interpolated values, for determining the upper and lower limits of the Confidence Interval.  Actual sample points will be no more than this distance from the true value of the estimate.}
   \item{parallel }{A logical indicating whether or not parallel processing will be used.  Note, may only be available for Mac and Linux operating systems.}
   \item{ncores }{Argument indicating number of cpu units to use.  Default is all available.}
 }
@@ -34,9 +34,11 @@ For the \code{negative} argument, this should be used if the profile likelihood 
 
 If \code{parallel} = TRUE then the pacakge \code{multicore} must be loaded.
 
-The function uses a grid search to obtain the approximate confidence limits.  Therefore, \code{nsample.units} should be carefully thought about beforehand when running the function.  Increasing this value will ensure a smoother surface, but at cost to time.  The function weights this quantity to ensure more samples for regions of the profile likelihood greater than the estimate.  The lower bound of the sampling interval to the estimate is made up of 2 times \code{nsample.units}, whereas the sampling interval from the estimate to the upper bound is 3 times \code{nsample.units}.  
+The function uses the \code{optimize} function to obtain the approximate confidence limits.  Therefore, \code{nse} should be carefully thought about beforehand when running the function.  Increasing this value will ensure the confidence limits are contained by the search space, but at a cost to time. 
 
-Similarly for \code{nse}, the function will include twice as many standard errors from the estimate to the upper bound than it does from the estimate to the lower bound.  If \code{negative} is FALSE, and the lower bound of the sampling interval extends beyond zero, this will instead be set to 0.
+If \code{negative} is FALSE, and the lower bound of the sampling interval extends beyond zero, this will instead be set to effectively zero.
+
+Obtaining the profile likelihood for residual variances may necessitate explicitly specifying the R structure of the ASReml model.  See example below.    
 }
 
 
@@ -65,18 +67,20 @@ May be unfeasible to estimate profile likelihoods for complex models with many v
     ginvD <- makeD(warcolak[,1:3])$listDinv
     warcolak$IDD <- warcolak$ID
     warcolak.mod <- asreml(trait1 ~ 1, random = ~ped(ID) + giv(IDD), 
-	ginverse = list(ID = ginvA, IDD = ginvD), data = warcolak) 
+	ginverse = list(ID = ginvA, IDD = ginvD), rcov = ~ idv(units), data = warcolak) 
     summary(warcolak.mod)$varcomp
     profileA <- proLik(full.model = warcolak.mod, component = "ped(ID)!ped", 
         G = TRUE, negative = FALSE, nsample.units = 3, nse = 3)
     profileA
-    profileD <- proLik(full.model = warcolak.mod, component = "giv(IDD).giv", 
+    profileD <- proLik(warcolak.mod, component = "giv(IDD).giv", 
 	G = TRUE, negative = FALSE, nsample.units = 3, nse = 3)
+    profileE <- proLik(warcolak.mod, component = "R!units.var", G = FALSE, negative = FALSE)
 
     x11(w = 6, h = 8)
-    par(mfrow = c(2,1))
+    par(mfrow = c(3,1))
       plot.proLik(profileA) 
       plot.proLik(profileD)
+      plot.proLik(profileE)
    }
 
 }
