@@ -12,7 +12,7 @@ When a mixed model is run in ASReml-R, this function can estimate the profile li
 \usage{
 proLik(full.model, component, G = TRUE, negative = FALSE, 
        nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 0.001,
-       parallel = FALSE, ncores = getOption("cores"))
+       parallel = FALSE, ncores = getOption("mc.cores", 2L))
 }
 
 \arguments{
@@ -32,7 +32,7 @@ proLik(full.model, component, G = TRUE, negative = FALSE,
 \details{
 For the \code{negative} argument, this should be used if the profile likelihood of a covariance component is to be constructed.
 
-If \code{parallel} = TRUE then the pacakge \code{multicore} must be loaded.
+\code{parallel} = TRUE should only be used on Linux or Mac OSes (i.e., not Windows).
 
 The function uses the \code{optimize} function to obtain the approximate confidence limits.  Therefore, \code{nse} should be carefully thought about beforehand when running the function.  Increasing this value will ensure the confidence limits are contained by the search space, but at a cost to time. 
 

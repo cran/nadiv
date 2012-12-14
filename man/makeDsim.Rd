@@ -5,7 +5,7 @@ Creates the dominance genetic relationship matrix through iteration}
 \description{
 Alleles are explicitly traced through a pedigree to obtain coefficients of fraternity between pairs of individuals (the probability of sharing both alleles identical by descent).  This is accomplished in an iterative process to account for the various routes by which an allele will progress through a pedigree due to Mendelian sampling.  This is an implementation of the simulation approach of Ovaskainen et al. (2008).}
 \usage{
-makeDsim(pedigree, N, parallel = FALSE, ncores = getOption("cores"),
+makeDsim(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores", 2L),
          invertD = TRUE, calcSE = FALSE, returnA = FALSE)
 }
 
@@ -29,7 +29,7 @@ Logical, indicating if the numerator relationship matrix (A) should be stored an
 \details{
 Missing parents (e.g., base population) should be denoted by either 'NA', '0', or '*'.
 
-If \code{parallel} = TRUE then the pacakge \code{multicore} must be loaded.
+\code{parallel} = TRUE should only be used on Linux or Mac operating systems (i.e., not Windows).
 
 Ovaskainen et al. (2008) indicated that the method of calculating the D matrix (see \code{\link{makeD}}) is only an approximation.  They proposed a simulation method that is implemented here.  This should be more appropriate, especially when inbreeding occurs in the pedigree. 
 

@@ -27,7 +27,7 @@ A numeric value indicating the level of Type I error for constructing the Confid
 Variances from the inverse of the Average Information matrix of an ASReml model are translated according to the \code{\link{varTrans}} function and used in constructing the 1-alpha Confidence Interval.}
 
 \value{
-A matrix is returned with a row for each variance component.  The three columns correspond to the Upper Confidence Limit, estimate from the \code{asreml} model, and Lower Confidence Limit for each variance component.}
+A matrix is returned with a row for each variance component.  The three columns correspond to the Lower Confidence Limit, estimate from the \code{asreml} model, and Upper Confidence Limit for each variance component.}
 
 \author{\email{matthewwolak@gmail.com}}
 

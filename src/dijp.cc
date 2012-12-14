@@ -14,17 +14,17 @@ void dijp(
 	double *dij
 ){         
 
-  int     k, j, m, kDam, kSire, jDam, jSire;
+  int     k, m, kDam, kSire, jDam, jSire;
   double rmmp, rffp, rmfp, rfmp, dij_tmp;
 
   for(k = 0; k < lAr[0]; k++){ 
     kDam = dam[indk[k]];
     kSire = sire[indk[k]];
-    if(kDam != -999 & kSire != -999){
+    if((kDam != -999) & (kSire != -999)){
        if(indk[k] != indj[k]){ 
          jDam = dam[indj[k]];
          jSire = sire[indj[k]];
-         if(jDam != -999 & jSire != -999){
+         if((jDam != -999) & (jSire != -999)){
            rmfp = 0.0;
            rmmp = 0.0;
            rfmp = 0.0;

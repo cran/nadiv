@@ -10,8 +10,8 @@
 \tabular{ll}{
 Package: \tab nadiv\cr
 Type: \tab Package\cr
-Version: \tab 2.10\cr
-Date: \tab 2012-10-15\cr
+Version: \tab 2.11\cr
+Date: \tab 2012-12-14\cr
 License: \tab GPL (>=2)\cr
 LazyLoad: \tab yes\cr
 }

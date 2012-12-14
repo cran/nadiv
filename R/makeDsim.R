@@ -1,4 +1,4 @@
-makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("cores"), invertD = TRUE, calcSE = FALSE, returnA = FALSE){
+makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores", 2L), invertD = TRUE, calcSE = FALSE, returnA = FALSE){
 
   approxD <- makeD(pedigree, parallel = parallel, ncores = ncores, invertD = invertD, returnA = returnA)
   lapproxD <- summary(approxD$D)
