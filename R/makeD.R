@@ -1,4 +1,4 @@
-makeD <- function(pedigree, parallel = FALSE, ncores = getOption("cores"), invertD = TRUE, returnA = FALSE, det = FALSE){
+makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L), invertD = TRUE, returnA = FALSE, det = FALSE){
 
   numeric.pedigree <- numPed(pedigree) 
   N <- dim(pedigree)[1]
@@ -37,8 +37,7 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("cores"), inver
      rm("Cout")
 
    } else{
-
-        require(multicore)
+        require(parallel)
         listA <- data.frame(Row = as.integer(rep(1:length(A@p[-1]), diff(A@p))), Column = as.integer(A@i + 1))
         wrap_dij <- function(x){
            sub_lA <- listA[min(x):max(x), 1:2]

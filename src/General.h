@@ -4,7 +4,8 @@ extern "C"{
 }
 #include <math.h>
 #include <map>                  
-#include <stdlib.h>    
+#include <stdlib.h>
+#include <time.h> 
 #include <new>            
 #include "R.h" 
 #include "Rmath.h" 

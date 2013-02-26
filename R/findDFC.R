@@ -1,4 +1,4 @@
-findDFC<-function(pedigree, parallel = FALSE, ncores = getOption("cores"))
+findDFC<-function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L))
 {
   numeric.pedigree <- numPed(pedigree)
   ped <- cbind(numeric.pedigree, genAssign(numeric.pedigree), rep(0, dim(numeric.pedigree)[1]))
@@ -14,7 +14,7 @@ findDFC<-function(pedigree, parallel = FALSE, ncores = getOption("cores"))
   gps <- cbind(numeric.pedigree[ps.noFS[,3], 2:3], numeric.pedigree[ps.noFS[,4], 2:3], numeric.pedigree[ps.noFS[,5], 2:3], numeric.pedigree[ps.noFS[,6], 2:3]) 
 
   if(parallel) {
-    require(multicore)
+    require(parallel)
     wrap_DFC <- function(x, grandparents){
     apply(grandparents[min(x):max(x), ], MARGIN = 1, FUN = DFC)
 }

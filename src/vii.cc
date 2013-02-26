@@ -3,8 +3,10 @@
 extern "C"{  
 
 void vii(
-        int *N,       
+        double *DC,
+	int *N,       
 	int *dam,
+        int *sire,
 	double *sex,
 	int *nN,
 	int *nonfound,
@@ -30,15 +32,21 @@ void vii(
            T->p[k] = pTP[k];
          }
 
-  for(j=0; j < nN[0]; j++){  //replace k with j
+  for(j=0; j < nN[0]; j++){  
       k=nonfound[j];
-      sumTcol=0.0;      
+      sumTcol=0.0; 
 
-      if(dam[k] != N[0]){
-         v[k] = 0.25*(1-f[dam[k]]);
+      if(sex[k] != 1.0){
+         v[k] = DC[0] * (1.0 - f[dam[k]]);   
       }
+      
          else{
-            v[k] = 0.25*(((sex[k] - 0.5) * 4) + 1.0 - f[dam[k]]);
+            if(sire[k] != N[0]){
+               v[k] = 0.25 * (1.0 - f[dam[k]]);
+            }
+               else{
+                  v[k] = 0.25 * (3.0 - f[dam[k]]);
+               }
          }
  
       for(m = T->p[k]; m < T->p[k+1]; m++){
@@ -46,10 +54,10 @@ void vii(
           if(l <= k){
               sumTcol += T->x[m] * T->x[m] * v[l];
           }
-     }
+      }
 
      f[k] = sumTcol - sex[k];
-   }
+  }
             
   cs_spfree(T);
 }

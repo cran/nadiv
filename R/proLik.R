@@ -1,4 +1,4 @@
-proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 0.001, parallel = FALSE, ncores = getOption("cores")){
+proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 0.001, parallel = FALSE, ncores = getOption("mc.cores", 2L)){
 
 
   s2 <- full.model$sigma2
@@ -37,7 +37,7 @@ proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.un
   if(negative == TRUE & Uint[2] > 1) Uint[2] <- 0.999999
   if(negative == TRUE & Lint[1] < -1) Lint[1] <- -0.999999
   if(parallel){
-     require(multicore)
+     require(parallel)
      tmpUCL <- mcparallel(expr = expression(c(optimize(f=tmpLRTU, interval = Uint, chi = chi.val, tol = tolerance), proLik_keep_uniQUe_UCL)))
 
   } else{
@@ -45,7 +45,7 @@ proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.un
     }
   LCL <- optimize(f = tmpLRTL, interval = Lint, chi = chi.val, tol = tolerance)
   if(parallel){
-     tmpUCL.out <- collect(tmpUCL, wait = TRUE)[[1]]
+     tmpUCL.out <- mccollect(tmpUCL, wait = TRUE)[[1]]
      UCL <- list(minimum = tmpUCL.out$minimum[[1]], objective = tmpUCL.out$objective[[1]])
      proLik_keep_uniQUe_UCL <- list(gam = tmpUCL.out$gam, lambdas = tmpUCL.out$lambdas)
   }
