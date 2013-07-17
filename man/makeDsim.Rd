@@ -1,7 +1,7 @@
 \name{makeDsim}
 \alias{makeDsim}
 \title{
-Creates the dominance genetic relationship matrix through iteration}
+Creates the dominance genetic relationship matrix through an iterative (simulation) process}
 \description{
 Alleles are explicitly traced through a pedigree to obtain coefficients of fraternity between pairs of individuals (the probability of sharing both alleles identical by descent).  This is accomplished in an iterative process to account for the various routes by which an allele will progress through a pedigree due to Mendelian sampling.  This is an implementation of the simulation approach of Ovaskainen et al. (2008).}
 \usage{

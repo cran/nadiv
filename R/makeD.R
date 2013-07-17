@@ -7,7 +7,7 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
 
   if(parallel){
      if(length(A@x)/ncores < 10){
-        cat(paste("Warning: pedigree too small - 'parallel' set to FALSE instead", "\n"))
+        warning("pedigree too small - 'parallel' set to FALSE instead")
         parallel <- FALSE
      }
   }

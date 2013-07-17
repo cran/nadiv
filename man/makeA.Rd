@@ -15,7 +15,10 @@ A pedigree where the columns are ordered ID, Dam, Sire}
 \details{
 Missing parents (e.g., base population) should be denoted by either 'NA', '0', or '*'.
 
-Used as a support function to \code{\link{makeD}}.}
+Used as a support function to \code{\link{makeD}}.
+
+See function \code{makeAinv} in the package namespace (not exported) for directly obtaining the inverse of the additive genetic relationship matrix.
+}
 
 \value{Returns A, or the numerator relationship matrix, in sparse matrix form.}
 

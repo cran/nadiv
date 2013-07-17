@@ -1,4 +1,4 @@
-findDFC<-function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L))
+findDFC <- function(pedigree, exact = FALSE, parallel = FALSE, ncores = getOption("mc.cores", 2L))
 {
   numeric.pedigree <- numPed(pedigree)
   ped <- cbind(numeric.pedigree, genAssign(numeric.pedigree), rep(0, dim(numeric.pedigree)[1]))
@@ -8,23 +8,37 @@ findDFC<-function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
 
   i <- unlist(mapply(rep, num.out[-ni, 1], each = seq((ni-1), 1)))
   j <- unlist(lapply(seq(2,ni), FUN = function(x) num.out[x:ni, 1]))
-  ps <- cbind(i, j, numeric.pedigree[i, 2:3], numeric.pedigree[j, 2:3])
-  ps.noFS <-ps[-c(which(ps[,3] == ps[,5] & ps[,4] == ps[,6])),]
-
-  gps <- cbind(numeric.pedigree[ps.noFS[,3], 2:3], numeric.pedigree[ps.noFS[,4], 2:3], numeric.pedigree[ps.noFS[,5], 2:3], numeric.pedigree[ps.noFS[,6], 2:3]) 
+  if(exact) exct <- 1 else exct <- 0
 
   if(parallel) {
-    require(parallel)
-    wrap_DFC <- function(x, grandparents){
-    apply(grandparents[min(x):max(x), ], MARGIN = 1, FUN = DFC)
-}
-    dfcs.vec <- pvec(seq(1,dim(gps)[1]), FUN = wrap_DFC, grandparents = gps, mc.set.seed = FALSE, mc.silent = TRUE, mc.cores = ncores, mc.cleanup = TRUE)
-    } else{ dfcs.vec <- apply(gps, MARGIN = 1, FUN = DFC)}
-  indexed <- cbind(ps.noFS, dfcs.vec)
-  num.dfcs <- indexed[indexed[,7] == 1, 1:6]
-  cnt.dfcs <- dim(unique(num.dfcs[, 3:6]))[1]
-  dfcs.names<-cbind(as.character(pedigree[num.dfcs[,1], 1]), as.character(pedigree[num.dfcs[,2], 1]))
-	
-return(list(PedPositionList = num.dfcs[, 1:2], DFC = dfcs.names, FamilyCnt = cnt.dfcs))
+     require(parallel)
+     wrap_DFC <- function(x){
+         i.tmp <- i[min(x):max(x)]
+         j.tmp <- j[min(x):max(x)]
+         Cout <- .C("dfc",
+	    as.integer(numeric.pedigree[, 2] - 1),
+            as.integer(numeric.pedigree[, 3] - 1),
+	    as.integer(i.tmp - 1),
+	    as.integer(j.tmp - 1),
+	    as.integer(length(i.tmp)),
+	    as.integer(exct))
+        Cout[[3]]
+     }
+     dfcs.vec <- pvec(seq.int(length(i)), FUN = wrap_DFC, mc.set.seed = FALSE, mc.silent = TRUE, mc.cores = ncores, mc.cleanup = TRUE)
+     } else{ 
+          Cout <- .C("dfc",
+	     as.integer(numeric.pedigree[, 2] - 1),
+             as.integer(numeric.pedigree[, 3] - 1),
+	     as.integer(i - 1),
+	     as.integer(j - 1),
+	     as.integer(length(i)),
+	     as.integer(exct))
+          dfcs.vec <- Cout[[3]]
+       }
+
+
+  yes.dfcs <- which(dfcs.vec == 1)
+
+return(list(PedPositionList = data.frame(i = i[yes.dfcs], j = j[yes.dfcs]), DFC = data.frame(i = pedigree[i[yes.dfcs], 1], j = pedigree[j[yes.dfcs], 1]), FamilyCnt = dim(unique(cbind(pedigree[i[yes.dfcs], 2:3], pedigree[j[yes.dfcs], 2:3])))[1]))
 }
 
