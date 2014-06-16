@@ -29,3 +29,35 @@ void ga(
         
 }
 }
+
+
+
+//////////////////////////////////////
+
+extern "C"{  
+
+void gaUnsort(
+	int *dam,
+	int *sire,
+	int *dgen,
+	int *sgen,
+	int *n
+){         
+
+  int     k, dk, sk;
+
+  for(k = 0; k < n[0]; k++){
+     dk = k;
+     sk = k;
+     while(dam[dk] != -999){
+        dk = dam[dk];
+        dgen[k] += 1;
+     }
+     while(sire[sk] != -999){
+        sk = sire[sk];
+        sgen[k] += 1;
+     }
+  }
+          
+}
+}

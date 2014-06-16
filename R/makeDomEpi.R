@@ -1,7 +1,7 @@
-makeDomEpi <- function(pedigree, output = c("AD", "DD", "both"), parallel = FALSE, Dinverse = FALSE, det = FALSE)
+makeDomEpi <- function(pedigree, output = c("AD", "DD", "both"), parallel = FALSE, invertD = FALSE, det = FALSE)
 {
   type <- match.arg(output)
-  Dout <- makeD(pedigree, parallel = parallel, invertD = Dinverse, returnA = TRUE)
+  Dout <- makeD(pedigree, parallel = parallel, invertD = invertD, returnA = TRUE)
 
   if(type == "AD"){
     AD <- Dout$A * Dout$D

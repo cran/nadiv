@@ -24,4 +24,4 @@ Used internally in the \code{proLik} function}
 
 \author{\email{matthewwolak@gmail.com}}
 
-\seealso{See Also \code{proLik}}
+\seealso{See Also \code{\link{proLik}}}

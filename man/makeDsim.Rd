@@ -64,6 +64,7 @@ This simulation can take a long time for large values of \code{N}.  If unsure, i
 
 
 \examples{
-  simDinv <- makeDsim(Mrode9, N = 1000, parallel = FALSE, invertD = TRUE, calcSE = TRUE)$listDsim
+  simDinv <- makeDsim(Mrode9, N = 1000, parallel = FALSE, invertD = TRUE,
+		calcSE = TRUE)$listDsim
 }
 

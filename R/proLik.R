@@ -10,7 +10,8 @@ proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.un
       warning("Boundary parameter: confidence interval estimation may produce strange behavior - proceed with caution)")
       }
   gamma.est <- full.model$gammas[gamma.ind][[1]]
-  std.err <- sqrt(diag(asreml:::asreml.ltri2mat(full.model$ai))[gamma.ind])
+  if(full.model$gammas[gamma.ind] == summary(full.model)$varcomp[gamma.ind, 2]) s2 <- 1
+  std.err <- sqrt(diag(aiFun(full.model))[gamma.ind])
   if(is.na(std.err) | std.err == 0) std.err <- 0.1 
   full.mod2 <- update.asreml(object = full.model, start.values = TRUE)$gammas.table
   chi.val <- -0.5 * qchisq(alpha, df = 1, lower.tail = FALSE)

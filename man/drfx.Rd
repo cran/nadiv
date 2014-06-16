@@ -18,7 +18,7 @@ The variance-covariance matrix to model the effects after
 A character indicating the factor in \code{dataf} with which to construct the design matrix
 }
   \item{dataf}{
-A dataframe with
+A dataframe with \code{fac} in it
 }
 }
 
@@ -39,7 +39,8 @@ If G = x, where 'x' is a single number, then 'x' should still be specified as a 
 }
 
 \examples{
-# Create maternal common environment effects for 2 traits with perfectly correlated effects
+# Create maternal common environment effects for 2 traits
+# with perfectly correlated effects
   Gmat <- matrix(c(10, 7.071, 7.071, 5), 2, 2)
   cfx <- drfx(G = Gmat, fac = "Dam", dataf = warcolak[1:200, ])
 

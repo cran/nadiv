@@ -4,7 +4,7 @@
 Half-sib pedigree construction
 }
 \description{
-Simulates a pedigree for a half-sib mating design.
+Simulates a pedigree for a half-sib mating design (sometimes also called the North Carolina Design 1).
 }
 \usage{
 simPedHS(s, d, n, uniqueDname = TRUE)

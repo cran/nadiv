@@ -6,7 +6,8 @@ Finds the double first cousins in a pedigree}
 Given a pedigree, all pairs of individuals that are double first cousins are returned.}
 
 \usage{
-findDFC(pedigree, exact = FALSE, parallel = FALSE, ncores = getOption("mc.cores", 2L))
+findDFC(pedigree, exact = FALSE, parallel = FALSE,
+	ncores = getOption("mc.cores", 2L))
 }
 
 \arguments{

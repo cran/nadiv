@@ -23,4 +23,4 @@
 
 \seealso{\code{proLik}}
 
-\examples{##See examples in \code{proLik}}
+\examples{##See examples in the help file for proLik()}

@@ -1,3 +1,9 @@
+################################################
+#Adapted from part of the 'inverseA' function
+# written by Jarrod Hadfield
+#in the 'MCMCglmm' package
+################################################
+
 makeAinv <- function(pedigree)
 {
   numped <- numPed(pedigree)
@@ -39,7 +45,8 @@ makeAinv <- function(pedigree)
    Ainv@i <- Cout[[10]][1:Cout[[13]]]
    Ainv@p <- Cout[[11]]
    Ainv@x <- Cout[[12]][1:Cout[[13]]]
+   Ainv@Dimnames <- list(pedigree[, 1], NULL)
 
-return(list(Ainv = Ainv, listAinv = sm2list(Ainv, rownames = pedigree[, 1], colnames = c("row", "column", "Ainv"))))
+return(list(Ainv = Ainv, listAinv = sm2list(Ainv, rownames = pedigree[, 1], colnames = c("row", "column", "Ainv")), f = Cout[[3]][-(N+1)]))
 }
 
