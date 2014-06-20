@@ -200,7 +200,7 @@ if(DC[0] == 0.0){
   cs_spfree(QV);
   cs_spfree(tS);
   cs_spfree(S);
-  free(AN);
-  free(li);
+  delete[] AN;
+  delete[] li;
 }
 }

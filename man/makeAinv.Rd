@@ -5,11 +5,14 @@
 \description{This returns the inverse of the additive relationship matrix.  It can also be used to obtain coefficients of inbreeding for the pedigreed population.
 }
 \usage{
-makeAinv(pedigree)
+makeAinv(pedigree, det = FALSE)
 }
 \arguments{
   \item{pedigree }{
 A pedigree where the columns are ordered ID, Dam, Sire}
+  \item{det }{
+Logical, indicating if the (log) determinant of the A matrix should be returned
+}
 }
 
 \details{
@@ -22,6 +25,7 @@ The function implements an adaptation of the Meuwissen and Luo (1992) algorithm 
   \item{Ainv }{the inverse of the additive genetic relationship matrix in sparse matrix form}
   \item{listAinv }{the three column form of the non-zero elements for the inverse of the additive genetic relationship matrix}
   \item{f }{the inbreeding coefficients for each individual in the pedigree}
+  \item{logDet }{the log determinant of the A matrix}
 }
 
 \references{

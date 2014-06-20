@@ -4,7 +4,7 @@
 #in the 'MCMCglmm' package
 ################################################
 
-makeAinv <- function(pedigree)
+makeAinv <- function(pedigree, det = FALSE)
 {
   numped <- numPed(pedigree)
   N <- dim(numped)[1]
@@ -23,13 +23,11 @@ makeAinv <- function(pedigree)
   nA <- N + 2 * length(dnmiss) + 2 * length(snmiss)
   nA <- nA + 2 * sum(duplicated(paste(numped[, 2], numped[, 3])[bnmiss]) == FALSE)
   inbreeding <- c(rep(0, N), -1)
-  dii <- rep(1, N)
   numped[numped == -998] <- N + 1
     Cout <- .C("ainv",
 	    as.integer(numped[, 2] - 1), #dam
 	    as.integer(numped[, 3] - 1),  #sire
 	    as.double(inbreeding),  #f
-	    as.double(dii),  #dii
             as.integer(Tinv@i),  #iTinvP
 	    as.integer(c(Tinv@p, length(Tinv@x))),  #pTinvP
             as.double(Tinv@x),  #xTinvP
@@ -42,11 +40,12 @@ makeAinv <- function(pedigree)
 
    Ainv <- Matrix(0, N, N)
    Ainv[1, 2] <- 1
-   Ainv@i <- Cout[[10]][1:Cout[[13]]]
-   Ainv@p <- Cout[[11]]
-   Ainv@x <- Cout[[12]][1:Cout[[13]]]
+   Ainv@i <- Cout[[9]][1:Cout[[12]]]
+   Ainv@p <- Cout[[10]]
+   Ainv@x <- Cout[[11]][1:Cout[[12]]]
    Ainv@Dimnames <- list(pedigree[, 1], NULL)
+   if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
-return(list(Ainv = Ainv, listAinv = sm2list(Ainv, rownames = pedigree[, 1], colnames = c("row", "column", "Ainv")), f = Cout[[3]][-(N+1)]))
+return(list(Ainv = Ainv, listAinv = sm2list(Ainv, rownames = pedigree[, 1], colnames = c("row", "column", "Ainv")), f = Cout[[3]][-(N+1)], logDet = logDet))
 }
 

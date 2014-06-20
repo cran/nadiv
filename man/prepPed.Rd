@@ -20,7 +20,7 @@ A logical argument indicating if checks on the validity of the pedigree structur
 }
 }
 \details{
-Many functions (both in nadiv and from other programs) dealing with pedigrees must first a pedigree such that individuals appear in the ID column in rows preceeding where they appear in either the Dam or Sire column.  Further, these functions and programs require that all individuals in the dam and sire columns of a pedigree also have an entry in the ID column.  This function easily prepares data sets to accommodate these requirements using a very fast topological sorting algorithm.
+Many functions (both in nadiv and from other programs) dealing with pedigrees must first sort a pedigree such that individuals appear in the ID column in rows preceeding where they appear in either the Dam or Sire column.  Further, these functions and programs require that all individuals in the dam and sire columns of a pedigree also have an entry in the ID column.  This function easily prepares data sets to accommodate these requirements using a very fast topological sorting algorithm.
    
 NOTE: more columns than just a pedigree can be passed in the \code{pedigree} argument.  In the case of missing founders, these columns are given NA values for all rows where founders have been added to the pedigree.  The entire object supplied to \code{pedigree} is ordered, ensuring that all information remains connected to the individual 
 

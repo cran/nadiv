@@ -17,14 +17,14 @@ Missing parents (e.g., base population) should be denoted by either 'NA', '0', o
 
 Used as a support function to \code{\link{makeD}}.
 
-See function \code{makeAinv} in the package namespace (not exported) for directly obtaining the inverse of the additive genetic relationship matrix.
+See function \code{\link{makeAinv}} for directly obtaining the inverse of the additive genetic relationship matrix.
 }
 
 \value{Returns A, or the numerator relationship matrix, in sparse matrix form.}
 
 \author{\email{matthewwolak@gmail.com}}
 
-\seealso{\code{\link{makeD}}}
+\seealso{\code{\link{makeD}}, \code{\link{makeS}}}
 
 \examples{
  makeA(Mrode2)

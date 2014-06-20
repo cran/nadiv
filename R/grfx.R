@@ -8,9 +8,9 @@ grfx <- function(n, G, incidence = NULL, saveIncidence = FALSE, output = "matrix
        if(warn) warning("using previous incidence matrix")
      } else{
           if(saveIncidence){
-	     nadiv_prev_Mincidence <<- chol(as(diag(1, n, n), "dgCMatrix"))
+	     nadiv_prev_Mincidence <<- Diagonal(n, 1)
              } else{
-                  nadiv_prev_Mincidence <- chol(as(diag(1, n, n), "dgCMatrix"))
+                  nadiv_prev_Mincidence <- Diagonal(n, 1)
                }
           warning("Incidence matrix used = Identity matrix")
        }
@@ -21,9 +21,8 @@ grfx <- function(n, G, incidence = NULL, saveIncidence = FALSE, output = "matrix
             nadiv_prev_Mincidence <- chol(incidence)
          }
     }
- #Must be "dgCMatrix" # chol(incidence), e.g., chol(as(diag(1, n, n), "dgCMatrix"))
 
-  M <- kronecker(nadiv_prev_Mincidence, Mg)
+  M <- suppressMessages(kronecker(nadiv_prev_Mincidence, Mg))
   Z <- Matrix(rnorm(n*d), nrow = 1)
   X <- Matrix((Z %*% M)@x, ncol = d, byrow = TRUE)
 

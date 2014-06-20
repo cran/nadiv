@@ -27,7 +27,7 @@ A dataframe with row names corresponding to the operator on the left hand side o
 }
 
 \author{
-Ian White, but included in this package by \email{matthewwolak@gmail.com}
+Ian White
 }
 
 

@@ -24,4 +24,4 @@ Used internally in the \code{proLik} function to call \code{constrainFun}}
 
 \author{\email{matthewwolak@gmail.com}}
 
-\seealso{See Also \code{proLik}, \code{constrainFun}}
+\seealso{See Also \code{\link{proLik}}, \code{\link{constrainFun}}}
