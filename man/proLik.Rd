@@ -43,6 +43,7 @@ Obtaining the profile likelihood for residual variances may necessitate explicit
 
 
 \value{
+An S3 object of class proLik
   \item{lambdas }{negative log Likelihood ratio test statistic.  Estimated from the log Likelihood of the \code{full.model} and the log Likelihood of the model with the \code{component} constrained to a value in the sampling interval}
   \item{var.estimates }{value along the sampling interval for which the \code{component} was constrained}
   \item{UCL }{approximate Upper Confidence Limit}
@@ -78,9 +79,9 @@ May be unfeasible to estimate profile likelihoods for complex models with many v
 
     x11(w = 6, h = 8)
     par(mfrow = c(3,1))
-      plot.proLik(profileA) 
-      plot.proLik(profileD)
-      plot.proLik(profileE)
+      plot(profileA) 
+      plot(profileD)
+      plot(profileE)
    }
 
 }

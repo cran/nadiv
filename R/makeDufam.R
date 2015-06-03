@@ -39,7 +39,6 @@ makeDufam <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores",
      rm("Cout")
 
    } else{
-        require(parallel)
         listA <- data.frame(Row = as.integer(rep(1:length(A@p[-1]), diff(A@p))), Column = as.integer(A@i + 1))
         wrap_dij <- function(x){
            sub_lA <- listA[min(x):max(x), 1:2]
@@ -58,7 +57,7 @@ makeDufam <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores",
         }
 
         cat(paste("starting to make D..."))
-        Dijs <- pvec(seq(1, dim(listA)[1], 1), FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
+        Dijs <- parallel::pvec(seq(1, dim(listA)[1], 1), FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
   
         D <- Matrix(0, N, N, sparse = TRUE)
         D@uplo <- "U"
@@ -77,8 +76,8 @@ makeDufam <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores",
   if(det) logDet <- determinant(D, logarithm = TRUE)$modulus[1] else logDet <- NULL
   if(invertD){
     Dinv <- as(solve(D), "dgCMatrix")
-    Dinv@Dimnames <- list(pedigree[pedigree$oseq, 1], NULL)
-    listDinv <- sm2list(Dinv, rownames=pedigree[pedigree$oseq, 1], colnames=c("row", "column", "Dinverse"))
+    Dinv@Dimnames <- list(as.character(pedigree[pedigree$oseq, 1]), NULL)
+    listDinv <- sm2list(Dinv, rownames = pedigree[pedigree$oseq, 1], colnames=c("row", "column", "Dinverse"))
  return(list(A = A, D = D, logDet = logDet, Dinv=Dinv, listDinv=listDinv))
   } else{
     return(list(A = A, D = D, logDet = logDet))

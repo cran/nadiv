@@ -7,7 +7,7 @@ Half-sib pedigree construction
 Simulates a pedigree for a half-sib mating design (sometimes also called the North Carolina Design 1).
 }
 \usage{
-simPedHS(s, d, n, uniqueDname = TRUE)
+simPedHS(s, d, n, uniqueDname = TRUE, prefix = NULL)
 }
 \arguments{
   \item{s }{
@@ -17,14 +17,18 @@ Number of sires
 Number of dams per sire
 }
   \item{n }{
-Number of offspring per mating (must be >2)
+Number of offspring per mating (must be > or = 2)
 }
-  \item{uniqueDname}{
+  \item{uniqueDname }{
 Logical indicating if dams should have unique names within sire families or throughout the entire pedigree
 }
+  \item{prefix }{
+Optional prefix to every identity
+}
+ 
 }
 \details{
-\code{n} must be > 2, because one male and one female offspring are produced from each mating
+\code{n} must be greater than or equal to 2, because one male and one female offspring are produced from each mating
 
 Some functions/calculations get bogged down if no two dams have the same ID in the entire pedigree (e.g., \code{aov}).  However, other functions must have unique identifiers for every individual.
 }

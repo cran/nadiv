@@ -14,8 +14,6 @@ makeA <- function(pedigree)
   Tinv@i <- as.integer(Tinv.row[el.order] - 1)
   Tinv@p <- as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1)
   Tinv@x <- as.double(Tinv.x[el.order])
-#  nA <- N + 2 * length(dnmiss) + 2 * length(snmiss)
-#  nA <- nA + 2 * sum(duplicated(paste(numped[, 2], numped[, 3])[bnmiss]) == FALSE)
   nA <- N + length(dnmiss) + length(snmiss)
   nA <- nA + sum(duplicated(paste(numped[, 2], numped[, 3])[bnmiss]) == FALSE)
   inbreeding <- c(rep(0, N), -1)
@@ -39,7 +37,6 @@ makeA <- function(pedigree)
    Ainv@i <- Cout[[9]][1:Cout[[12]]]
    Ainv@p <- Cout[[10]]
    Ainv@x <- Cout[[11]][1:Cout[[12]]]
-
  chol2inv(t(Ainv))
 }
 

@@ -6,9 +6,12 @@ aiFun,
 constrainFun,
 drfx,
 findDFC,
+founderLine,
 genAssign,
 ggcontrib,
 grfx,
+is.proLik,
+is.numPed,
 makeA,
 makeAA,
 makeAinv,
@@ -27,3 +30,5 @@ simPedDFC,
 simPedHS,
 sm2list,
 varTrans)
+
+S3method(plot, proLik)
