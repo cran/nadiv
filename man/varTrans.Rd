@@ -27,7 +27,7 @@ Returns a numeric vector of variances for each variance component in an ASReml-R
     ginvA <- asreml.Ainverse(warcolak)$ginv
     ginvD <- makeD(warcolak[,1:3])$listDinv
     warcolak$IDD <- warcolak$ID
-    warcolak.mod <- asreml(trait1 ~ 1, random = ~ped(ID) + giv(IDD), 
+    warcolak.mod <- asreml(trait1 ~ sex, random = ~ ped(ID) + giv(IDD), 
 	ginverse = list(ID = ginvA, IDD = ginvD), data = warcolak) 
     summary(warcolak.mod)$varcomp
     sqrt(varTrans(warcolak.mod))  # sqrt() so can compare with standard errors from summary
