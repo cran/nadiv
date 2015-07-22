@@ -1,4 +1,4 @@
-750c35d9824555eebfdc339b334d07c2 *DESCRIPTION
+baf588deff1cae4adde84e12d9613c03 *DESCRIPTION
 3bb02583ce19635091758478aee2faa3 *NAMESPACE
 8a9e5c3d233aee0a160a01ae4f8d1581 *R/LDtL.R
 2848deb8d21b83425a0e478184e6efec *R/LRTest.R
@@ -14,7 +14,7 @@ f41679afce120208481a9afa076aad06 *R/genAssign.R
 0f8ac755a92b303715fdae869832f82a *R/grfx.R
 182a5ff34b49412a659dbbb9c896ec4a *R/makeA.R
 5979a814f39c91a1edbe03c13358d099 *R/makeAA.R
-c783221e15b65e2c941fd0df4002cb8c *R/makeAinv.R
+0e36c01c168526b5e344357295eea908 *R/makeAinv.R
 6d2d2cb36ee03fa6984100b2e2547589 *R/makeD.R
 b9ebc9c94bd00885d1dd9e569845da7e *R/makeDomEpi.R
 e65862a9760def0fd92d2cc8fd13b76b *R/makeDsim.R
@@ -57,12 +57,12 @@ d572d0f854f636b8dc8874053b10b304 *man/ggcontrib.Rd
 d142aaa8aa1811f9cfed758703585d4b *man/grfx.Rd
 232ec464284b9ac2fc82002eb550fa1d *man/makeA.Rd
 d6c67d97d06cff847d8598193bfc825e *man/makeAA.Rd
-11d30dc7c3488d26c4c9bf5c41382630 *man/makeAinv.Rd
+13d065155d3ac4ad85fc0e8b33dcbad1 *man/makeAinv.Rd
 3548461a0bea75dc605301778085ce0f *man/makeD.Rd
 f16a8f8c2e3f3e272e1502b89183494f *man/makeDomEpi.Rd
 46af611563199be7c6c011f1fea34b54 *man/makeDsim.Rd
 3eb39eaf88a8bc7a0381e6c0b4555b02 *man/makeS.Rd
-1c364d0e2874f49ccf3695da9ff80ffa *man/nadiv-package.Rd
+e5511d40f48a6d8e4329413bf35ccf8d *man/nadiv-package.Rd
 87e837359eedc96b5fe3f9abbe876fe0 *man/numPed.Rd
 33fcf5df2da01311818118ea8affacfa *man/parConstrainFun.Rd
 21cb9469ae1c4cbef39e066200794da4 *man/pcc.Rd
