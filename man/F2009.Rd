@@ -1,13 +1,15 @@
-\name{Q1988}
-\alias{Q1988}
+\name{F2009}
+\alias{F2009}
 \docType{data}
 \title{
-Pedigree, adapted from Quaas (1988) equation [5]}
+Pedigree, adapted from Fikse (2009)
+}
 \description{
-An example pedigree with genetic groups}
-\usage{data("Q1988")}
+An example pedigree with genetic groups and fuzzy classification of genetic groups.
+}
+\usage{data("F2009")}
 \format{
-  A data frame with 11 observations on the following 8 variables.
+  A data frame with 16 observations on the following 11 variables.
   \describe{
     \item{\code{id} }{a factor with levels indicating the unique individuals (including phantom parents) and genetic groups}
     \item{\code{dam} }{a factor of observed maternal identities}
@@ -17,8 +19,15 @@ An example pedigree with genetic groups}
     \item{\code{phantomDam} }{a factor of maternal identities with phantom parents inserted instead of \code{NA}}
     \item{\code{phantomSire} }{a factor of paternal identities with phantom parents inserted instead of \code{NA}}
     \item{\code{group} }{a factor of genetic groups to which each phantom parent belongs}
+    \item{\code{g1} }{a numeric vector with probabilities of group \code{g1} membership for each phantom parent}
+    \item{\code{g2} }{a numeric vector with probabilities of group \code{g2} membership for each phantom parent}
+    \item{\code{g3} }{a numeric vector with probabilities of group \code{g3} membership for each phantom parent}
   }
 }
+
+
 \source{
-Quaas, R.L. 1988. Additive genetic model with groups and relationships. Journal of Dairy Science 71:1338-1345.}
+Fikse, F. 2009. Fuzzy classification of phantom parent groups in an animal model. Genetics Selection Evolution 41:42.
+}
+
 \keyword{datasets}

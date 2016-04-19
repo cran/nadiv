@@ -1,8 +1,8 @@
 useDynLib(nadiv)
 import(Matrix)
 importFrom("graphics", "abline", "plot")
-importFrom("methods", "as")
-importFrom("stats", "as.formula", "deriv", "na.omit", "optimize", "pchisq", "qchisq", "qnorm", "rnorm")
+importFrom("methods", "as", "is")
+importFrom("stats", "as.formula", "deriv", "na.omit", "optimize", "pchisq", "qchisq", "qnorm", "rnorm", "sd")
 
 export(aic,
 aiCI,
@@ -16,9 +16,10 @@ ggcontrib,
 grfx,
 is.proLik,
 is.numPed,
+LRTest,
 makeA,
 makeAA,
-makeAinv,
+makeAstarMult,
 makeD,
 makeDomEpi,
 makeDsim,
@@ -31,9 +32,16 @@ prepPed,
 proLik,
 prunePed,
 ronPed,
+simGG,
 simPedDFC,
 simPedHS,
 sm2list,
 varTrans)
+export(makeAinv, makeAinv.default, makeAinv.fuzzy)
 
+S3method(makeAinv, default)
+S3method(makeAinv, fuzzy)
 S3method(plot, proLik)
+S3method(is, proLik)
+S3method(is, numPed)
+
