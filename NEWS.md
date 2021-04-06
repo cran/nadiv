@@ -1,4 +1,10 @@
-# 2.17.0
+# 2.17.1
+
+## Small changes
+  - fix bug in `prepPed()` as often encountered/reported from use in `optiSel`
+    - see [issue](https://github.com/matthewwolak/nadiv/issues/27#issuecomment-764707603)
+     
+# 2.17.0 Released to CRAN 14 January 2021
 ## NEW
   * `makeMinv()` creates the inverse of the (additive) mutational effects relatedness matrix.
   * `makeT()` creates the lower triangle of the cholesky factor of the additive genetic numerator relatedness matrix.
